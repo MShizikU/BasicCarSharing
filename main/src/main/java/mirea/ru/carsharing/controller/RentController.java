@@ -1,6 +1,7 @@
 package mirea.ru.carsharing.controller;
 
 import mirea.ru.carsharing.model.Rent;
+import mirea.ru.carsharing.service.DefaultEmailService;
 import mirea.ru.carsharing.service.RentService;
 import mirea.ru.carsharing.utilities.ExecutionResult;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +12,11 @@ import java.util.List;
 @RestController
 @RequestMapping("api/rents")
 public class RentController {
-
+    private final DefaultEmailService emailService;
     private final RentService rentService;
 
-    public RentController(RentService rentService) {
+    public RentController(DefaultEmailService emailService, RentService rentService) {
+        this.emailService = emailService;
         this.rentService = rentService;
     }
 
@@ -34,6 +36,8 @@ public class RentController {
         if (result.getErrorMessage() != null) {
             return ResponseEntity.badRequest().body(result);
         }
+
+        emailService.sendEmail("sidorovstasdw@gmail.com", "TestTOT11", "Testing form java");
 
         return ResponseEntity.ok(result);
     }
