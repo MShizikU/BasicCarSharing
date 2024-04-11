@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("")
@@ -23,18 +24,21 @@ public class AuthController {
         this.userLevelService = userLevelService;
     }
 
+    @Operation(hidden = true)
     @GetMapping("/login")
     public ModelAndView showLoginPage() {
         ModelAndView modelAndView = new ModelAndView("login_page");
         return modelAndView;
     }
 
+    @Operation(hidden = true)
     @GetMapping("/register")
     public ModelAndView showRegistrationPage() {
         ModelAndView modelAndView = new ModelAndView("register_page");
         return modelAndView;
     }
 
+    @Operation(summary = "Исполнение входа пользователя", description = "Выполняет аутентификацию пользователя по данным логина и пароля")
     @PostMapping("/login")
     public ResponseEntity<ExecutionResult<LoginResultDTO>> performLogin(@RequestBody LoginDTO loginDTO){
         ExecutionResult<LoginResultDTO> result = userService.performLogin(loginDTO);
@@ -44,6 +48,7 @@ public class AuthController {
         return ResponseEntity.ok(result);
     }
 
+    @Operation(summary = "Регистрация нового пользователя", description = "Регистрирует нового пользователя в системе")
     @PostMapping("/register")
     public ResponseEntity<ExecutionResult<String>> performRegistration(@RequestBody RegistrationDTO regDTO){
         ExecutionResult<String> result = userService.performRegistration(regDTO);

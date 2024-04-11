@@ -18,7 +18,10 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
+import io.swagger.v3.oas.annotations.Hidden;
 
+
+@Hidden
 @Controller
 @Slf4j
 @RequestMapping("/api")

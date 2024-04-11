@@ -24,6 +24,8 @@ public class SecurityConfig{
         http.csrf().disable().cors().disable()
                 .addFilterBefore(new AuthenticationFilter(new ObjectMapper()), BasicAuthenticationFilter.class)
                 .authorizeRequests()
+                .requestMatchers("/v3/api-docs").permitAll()
+                .requestMatchers("/swagger-ui").permitAll()
                 .requestMatchers("/registration").permitAll()
                 .requestMatchers("/login").permitAll()
                 .requestMatchers("/api/css/**").permitAll()

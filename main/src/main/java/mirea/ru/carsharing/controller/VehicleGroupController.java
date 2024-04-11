@@ -1,5 +1,8 @@
 package mirea.ru.carsharing.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import mirea.ru.carsharing.model.VehicleGroup;
 import mirea.ru.carsharing.service.VehicleGroupService;
 import mirea.ru.carsharing.utilities.ExecutionResult;
@@ -10,10 +13,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("api/vehicle/groups")
+@Tag(name = "Vehicle Groups", description = "API для управления группами автомобилей")
 public class VehicleGroupController {
 
     private final VehicleGroupService vehicleGroupService;
@@ -23,6 +26,7 @@ public class VehicleGroupController {
         this.vehicleGroupService = vehicleGroupService;
     }
 
+    @Operation(summary = "Создать группу автомобилей", description = "Создает новую группу автомобилей")
     @PostMapping
     public ResponseEntity<ExecutionResult<VehicleGroup>> createVehicleGroup(@RequestBody VehicleGroup vehicleGroup) {
         ExecutionResult<VehicleGroup> result = vehicleGroupService.createVehicleGroup(vehicleGroup);
@@ -33,9 +37,11 @@ public class VehicleGroupController {
         }
     }
 
+    @Operation(summary = "Обновить информацию о группе автомобилей", description = "Обновляет информацию о существующей группе автомобилей по ее ID")
     @PutMapping("/{id}")
     public ResponseEntity<ExecutionResult<VehicleGroup>> updateVehicleGroup(
-            @PathVariable("id") Integer id, @RequestBody VehicleGroup vehicleGroup) {
+            @Parameter(description = "ID группы автомобилей") @PathVariable("id") Integer id,
+            @RequestBody VehicleGroup vehicleGroup) {
         ExecutionResult<VehicleGroup> result = vehicleGroupService.updateVehicleGroup(id, vehicleGroup);
         if (result.getErrorMessage() != null) {
             return ResponseEntity.badRequest().body(result);
@@ -44,8 +50,10 @@ public class VehicleGroupController {
         }
     }
 
+    @Operation(summary = "Удалить группу автомобилей", description = "Удаляет группу автомобилей по ее ID")
     @DeleteMapping("/{id}")
-    public ResponseEntity<ExecutionResult<Void>> deleteVehicleGroup(@PathVariable("id") Integer id) {
+    public ResponseEntity<ExecutionResult<Void>> deleteVehicleGroup(
+            @Parameter(description = "ID группы автомобилей") @PathVariable("id") Integer id) {
         ExecutionResult<Void> result = vehicleGroupService.deleteVehicleGroup(id);
         if (result.getErrorMessage() != null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(result);
@@ -54,8 +62,10 @@ public class VehicleGroupController {
         }
     }
 
+    @Operation(summary = "Получить информацию о группе автомобилей по ID", description = "Получает информацию о группе автомобилей по ее ID")
     @GetMapping("/{id}")
-    public ResponseEntity<ExecutionResult<VehicleGroup>> getVehicleGroupById(@PathVariable("id") Integer id) {
+    public ResponseEntity<ExecutionResult<VehicleGroup>> getVehicleGroupById(
+            @Parameter(description = "ID группы автомобилей") @PathVariable("id") Integer id) {
         ExecutionResult<VehicleGroup> result = vehicleGroupService.getVehicleGroupById(id);
         if (result.getErrorMessage() != null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
@@ -64,6 +74,7 @@ public class VehicleGroupController {
         }
     }
 
+    @Operation(summary = "Получить список всех групп автомобилей", description = "Получает список всех зарегистрированных групп автомобилей")
     @GetMapping
     public ResponseEntity<ExecutionResult<List<VehicleGroup>>> getAllVehicleGroups() {
         ExecutionResult<List<VehicleGroup>> result = vehicleGroupService.getAllVehicleGroups();
